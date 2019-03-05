@@ -5,7 +5,6 @@ import com.umana.corso.rental.domain.model.Shop
 
 object RentalMessages {
 
-
   case class ReserveMovie(idUser:String,IdMovie:String,IdShop:String)
   case class ReserveMovieResponse(result: Either[ReserveMovieException, Unit])
 
