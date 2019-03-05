@@ -28,7 +28,7 @@ class CheckActor (checkRepository: CheckRepository) extends Actor {
         .map(result => CheckReserveDateResponse(Right(Unit)))
         .pipeTo(self)
 
-    case adas =>
+    case foundmatch =>
       context.system.scheduler.scheduleOnce(5 seconds, self, CheckReserveDate())
   }
 }
