@@ -2,7 +2,7 @@ package com.umana.corso.rental.data.repository
 
 import com.umana.corso.rental.domain.exception._
 
-import java.sql.{DriverManager, ResultSet}
+import java.sql.{DriverManager}
 
 import akka.actor.ActorSystem
 import com.umana.corso.rental.domain.repository.RentRepository

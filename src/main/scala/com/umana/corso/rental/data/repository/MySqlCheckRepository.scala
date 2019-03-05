@@ -4,10 +4,6 @@ import com.umana.corso.rental.domain.repository.CheckRepository
 import java.sql.DriverManager
 
 import akka.actor.ActorSystem
-import com.umana.corso.rental.domain.model.Shop
-import com.umana.corso.rental.domain.repository.ShopRepository
-
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 import java.util.Calendar
 

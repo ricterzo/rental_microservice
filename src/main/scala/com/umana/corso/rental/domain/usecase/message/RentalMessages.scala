@@ -5,14 +5,18 @@ import com.umana.corso.rental.domain.model.Shop
 
 object RentalMessages {
 
-<<<<<<< HEAD
-=======
+  //region Reserve
 
->>>>>>> master
   case class ReserveMovie(idUser:String,IdMovie:String,IdShop:String)
   case class ReserveMovieResponse(result: Either[ReserveMovieException, Unit])
 
+  //endregion
+
+  //region Rent
+
   case class RentMovie(idUser:String,IdMovie:String,IdShop:String)
   case class RentMovieResponse(result: Either[RentMovieException, Unit])
+
+  //endregion
 
 }

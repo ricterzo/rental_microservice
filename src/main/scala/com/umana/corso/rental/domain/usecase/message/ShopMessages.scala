@@ -10,4 +10,6 @@ object ShopMessages {
   case class GetShopByIdMovie(idMovie : String)
   case class GetShopByIdMovieResponse(result:Seq[Shop])
 
+  //endregion
+
 }

@@ -34,7 +34,6 @@ class RentActor (rentRepository: RentRepository) extends Actor {
           case e: RentMovieException => RentMovieResponse(Left(e))
         }
         .pipeTo(sender())
-
   }
 
 }

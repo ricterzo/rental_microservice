@@ -20,7 +20,6 @@ class CheckActor(checkRepository: CheckRepository) extends Actor {
   }
 
   override def receive: Receive = {
-
     case CheckReserveDate() =>
       checkRepository
         .check()
