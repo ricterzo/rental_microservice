@@ -5,13 +5,10 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.typesafe.config.ConfigFactory
 import com.umana.corso.rental.api.RestInterface
-import com.umana.corso.rental.data.repository.{MySqlCheckRepository, MySqlRentRepository, MySqlShopRepository}
-import com.umana.corso.rental.domain.repository.{CheckRepository, RentRepository, ShopRepository}
-import com.umana.corso.rental.domain.usecase.actor.{CheckActor, RentActor, ShopActor}
-
-import com.umana.corso.rental.data.repository.{MySqlRentRepository, MySqlShopRepository}
+import com.umana.corso.rental.data.repository._
+import com.umana.corso.rental.domain.repository._
+import com.umana.corso.rental.domain.usecase.actor.{CheckActor, RentalActor, ReserveActor, ShopActor}
 import com.umana.corso.rental.domain.repository.{RentRepository, ShopRepository}
-import com.umana.corso.rental.domain.usecase.actor.{RentActor, ShopActor}
 
 import scala.concurrent.ExecutionContext
 
@@ -28,6 +25,9 @@ object Application extends App with RestInterface {
   val name = config.getString("mysql.name")
   val password = config.getString( "mysql.password")
 
+  val usersApi = config.getString("api.users")
+  val catalogueApi = config.getString("api.catalogue")
+
   implicit val system: ActorSystem = ActorSystem("rentalmovie-microservices")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
@@ -36,13 +36,17 @@ object Application extends App with RestInterface {
   val shopRepository: ShopRepository = new MySqlShopRepository(mySqlUrl,name,password,system)
   val shopActor: ActorRef = system.actorOf(ShopActor.props(shopRepository))
 
-  val rentRepository: RentRepository = new MySqlRentRepository(mySqlUrl,name,password,system)
-  val rentActor: ActorRef = system.actorOf(RentActor.props(rentRepository))
-
-
   val checkRepository: CheckRepository = new MySqlCheckRepository(mySqlUrl,name,password,system)
   val checkActor: ActorRef = system.actorOf(CheckActor.props(checkRepository))
 
+  val userRepository: UserRepository = new ApiUserRepository(usersApi)
+  val catalogueRepository: CatalogueRepository = new ApiCatalogueRepository(catalogueApi)
+
+  val reserveRepository: ReserveRepository = new MySqlReserveRepository(mySqlUrl,name,password,system)
+  val reserveActor: ActorRef = system.actorOf(ReserveActor.props(reserveRepository,userRepository,catalogueRepository))
+
+  val rentRepository: RentRepository = new MySqlRentRepository(mySqlUrl,name,password,system)
+  val rentActor: ActorRef = system.actorOf(RentalActor.props(rentRepository,userRepository,catalogueRepository))
 
   val route = rentalRoutes
   val bindingFuture = Http().bindAndHandle(route, httpHost, httpPort)

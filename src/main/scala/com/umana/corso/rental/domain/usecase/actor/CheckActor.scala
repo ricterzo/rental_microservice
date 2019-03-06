@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
 
 class CheckActor(checkRepository: CheckRepository) extends Actor {
   private implicit val executionContext: ExecutionContext = context.system.dispatcher
-  private implicit val timeout: Timeout = Timeout(5.seconds)
+  private implicit val timeout: Timeout = Timeout(60.seconds)
 
 
   override def preStart(): Unit = {
@@ -23,11 +23,11 @@ class CheckActor(checkRepository: CheckRepository) extends Actor {
     case CheckReserveDate() =>
       checkRepository
         .check()
-        .map(result => CheckReserveDateResponse(Right(Unit)))
+        .map(_ => CheckReserveDateResponse(Unit))
         .pipeTo(self)
 
-    case foundmatch =>
-      context.system.scheduler.scheduleOnce(5 seconds, self, CheckReserveDate())
+    case CheckReserveDateResponse(()) =>
+      context.system.scheduler.scheduleOnce(60 seconds, self, CheckReserveDate())
   }
 }
 

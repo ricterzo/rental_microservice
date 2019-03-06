@@ -20,7 +20,6 @@ class MySqlShopRepository (
 
     override def getShopByIdMovie(idToFind:String) : Future[Seq[Shop]] = Future {
       val shopList = ListBuffer.empty[Shop]
-
       try {
         val con = DriverManager.getConnection(url, user, password)
         try {
@@ -39,7 +38,6 @@ class MySqlShopRepository (
         }
         finally if (con != null) con.close()
       }
-
       shopList
     }
 

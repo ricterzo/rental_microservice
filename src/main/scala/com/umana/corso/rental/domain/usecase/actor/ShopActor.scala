@@ -20,7 +20,6 @@ class ShopActor (shopRepository: ShopRepository) extends Actor {
         .getShopByIdMovie(idMovie)
         .map(result => GetShopByIdMovieResponse(result))
         .pipeTo(sender())
-
   }
 
 }
